@@ -39,6 +39,6 @@ steps:
       mavenOptions: '-Xmx2048m'
       mavenVersionOption: 'Default'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '11.0.11'
+      jdkVersionOption: '1.11'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
