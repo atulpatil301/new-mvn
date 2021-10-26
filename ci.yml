@@ -32,7 +32,7 @@ steps:
       goals: package
       mavenVersionSelection: Path
       jdkSourceOption: 'PreInstalled'
-      mavenPath: /opt/maven
+      mavenPath: /usr/share/maven
       mavenOptions: '-Xmx2048m'
       mavenVersionOption: 'Default'
       javaHomeOption: 'JDKVersion'
