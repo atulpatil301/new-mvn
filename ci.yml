@@ -11,12 +11,12 @@ pool:
    - agent.name -equals aws
 
 steps:
-- task: Bash@3
-  displayName: 'Use JDK11 by default'
-  inputs:
-    targetType: 'inline'
-    script: |
-      echo "##vso[task.setvariable variable=JAVA_HOME]$JAVA_HOME_11_X64"
+  - task: Bash@3
+    displayName: 'Use JDK11 by default'
+    inputs:
+      targetType: 'inline'
+      script: |
+        echo "##vso[task.setvariable variable=JAVA_HOME]$JAVA_HOME_11_X64"
       
   - task: Cache@2
     displayName: 'Cache Maven local repo'
