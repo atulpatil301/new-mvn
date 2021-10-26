@@ -9,7 +9,7 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.genpact</groupId>
+	<groupId>com.test</groupId>
 	<artifactId>fda-flowable</artifactId>
 	<version>1.2.0-RELEASE</version>
 	<name>Flowable-Fda-Service</name>
