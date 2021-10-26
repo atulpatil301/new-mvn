@@ -6,9 +6,9 @@ trigger:
 - master
 
 pool:
-  name: AWS
+  name: Demo
   demands:
-   - agent.name -equals aws
+   - agent.name -equals demo
 
 steps:
   - task: Bash@3
