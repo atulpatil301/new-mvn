@@ -6,7 +6,7 @@ trigger:
 - master
 
 pool:
-  name: aws
+  name: AWS
   demands:
    - agent.name -equals aws
 
