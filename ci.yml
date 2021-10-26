@@ -26,6 +26,7 @@ steps:
       mavenVersionSelection: Path
       mavenPath: /opt/maven
       mavenOptions: '-Xmx2048m'
+      mavenVersionOption: 'Default'
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'
       jdkArchitectureOption: 'x64'
