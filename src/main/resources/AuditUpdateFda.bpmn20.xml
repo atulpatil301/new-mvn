@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="AuditUpdateFda" name="AuditUpdateFda" isExecutable="true">
+    <startEvent id="start" name="start" flowable:formFieldValidation="true"></startEvent>
+    <serviceTask id="updateAudit" name="UpdateAudit" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${auditPath}/case-management/case/audit/update]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${auditDetails}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[auditOut]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseParameters">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariablePrefix">
+          <flowable:string><![CDATA[auditResult]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+       	<flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="exceptionAuditUpdate" name="ExceptionAudit" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${auditPath}/case-management/case/exception]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${auditOut}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+         <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <exclusiveGateway id="sid-1099ACEF-FA89-45B1-B812-518EB1A72BC9"></exclusiveGateway>
+    <endEvent id="end" name="end"></endEvent>
+    <sequenceFlow id="sid-673A3385-1F6F-4BAA-9EC0-00AAC611BCA6" sourceRef="start" targetRef="updateAudit"></sequenceFlow>
+    <sequenceFlow id="sid-613AAA80-A9F5-4A76-9860-71FA0C3F7FDC" sourceRef="updateAudit" targetRef="sid-1099ACEF-FA89-45B1-B812-518EB1A72BC9"></sequenceFlow>
+    <sequenceFlow id="sid-481750C8-431B-4A0F-9979-29216B82B937" sourceRef="exceptionAuditUpdate" targetRef="end"></sequenceFlow>
+    <sequenceFlow id="SaveAuditFlow" name="SaveAuditFlow" sourceRef="sid-1099ACEF-FA89-45B1-B812-518EB1A72BC9" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${auditOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SaveAuditExceptionFlow" name="SaveAuditExceptionFlow" sourceRef="sid-1099ACEF-FA89-45B1-B812-518EB1A72BC9" targetRef="exceptionAuditUpdate">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!auditOut.success}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_AuditFda">
+    <bpmndi:BPMNPlane bpmnElement="AuditFda" id="BPMNPlane_AuditFda">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="75.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="updateAudit" id="BPMNShape_saveAudit">
+        <omgdc:Bounds height="80.0" width="100.0" x="255.0" y="35.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exceptionAuditUpdate" id="BPMNShape_exceptionAudit">
+        <omgdc:Bounds height="80.0" width="100.0" x="675.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-1099ACEF-FA89-45B1-B812-518EB1A72BC9" id="BPMNShape_sid-1099ACEF-FA89-45B1-B812-518EB1A72BC9">
+        <omgdc:Bounds height="40.0" width="40.0" x="480.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="486.0" y="214.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-481750C8-431B-4A0F-9979-29216B82B937" id="BPMNEdge_sid-481750C8-431B-4A0F-9979-29216B82B937">
+        <omgdi:waypoint x="725.0" y="109.95"></omgdi:waypoint>
+        <omgdi:waypoint x="725.0" y="162.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="162.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="214.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-613AAA80-A9F5-4A76-9860-71FA0C3F7FDC" id="BPMNEdge_sid-613AAA80-A9F5-4A76-9860-71FA0C3F7FDC">
+        <omgdi:waypoint x="354.95000000000005" y="73.97435897435898"></omgdi:waypoint>
+        <omgdi:waypoint x="480.4020100502509" y="71.40100502512563"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SaveAuditFlow" id="BPMNEdge_SaveAuditFlow">
+        <omgdi:waypoint x="500.43910256410254" y="90.50462844330558"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0445684667565" y="214.00007015017613"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SaveAuditExceptionFlow" id="BPMNEdge_SaveAuditExceptionFlow">
+        <omgdi:waypoint x="519.5731622590768" y="71.37219730941705"></omgdi:waypoint>
+        <omgdi:waypoint x="674.9999999999998" y="70.3337416481069"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-673A3385-1F6F-4BAA-9EC0-00AAC611BCA6" id="BPMNEdge_sid-673A3385-1F6F-4BAA-9EC0-00AAC611BCA6">
+        <omgdi:waypoint x="104.94999960454754" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="255.0" y="75.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

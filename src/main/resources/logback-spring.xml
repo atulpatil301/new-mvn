@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="LOG_HOME"
+		value="/home/ubuntu/FDA/Logs/orchestration/" />
+	<springProperty scope="context" name="serverName"
+		source="HOSTNAME" />
+	<property name="AppName" value="orchestration" />
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}${serverName:-${HOSTNAME}} [%thread]
+				[%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}]
+				%-5level
+				%logger{36}.%M\(%line\) - %msg%n
+			</pattern>
+		</layout>
+	</appender>
+
+	<appender name="INFOAPPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}${AppName}_info.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}${serverName:-${HOSTNAME}} [%thread]
+				[%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}]
+				%-5level
+				%logger{36}.%M\(%line\) - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}${AppName}_info.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="ERRORAPPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}${AppName}_error.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}${serverName:-${HOSTNAME}} [%thread]
+				[%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}]
+				%-5level
+				%logger{36}.%M\(%line\) - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}${AppName}_error.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="DEBUGAPPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}${AppName}_debug.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}${serverName:-${HOSTNAME}} [%thread]
+				[%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}]
+				%-5level
+				%logger{36}.%M\(%line\) - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}${AppName}_debug.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="TRACEAPPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}${AppName}_trace.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}${serverName:-${HOSTNAME}} [%thread]
+				[%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}]
+				%-5level
+				%logger{36}.%M\(%line\) - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>TRACE</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}${AppName}_trace.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<!-- Start- Off the logging below packages -->
+	<logger name="org.springframework.*" level="ON"
+		additivity="false" />
+	<logger name="org.hibernate.*" level="ON" additivity="false" />
+	<logger name="com.genpact.fda.platformadapter.*" level="ON"
+		additivity="false" />
+	<!-- End- Off the logging below packages -->
+
+	<springProfile name="dev,qa">
+		<logger name="com" level="TRACE" additivity="false">
+			<appender-ref ref="TRACEAPPENDER" />
+		</logger>
+		<logger name="com" level="ERROR" additivity="false">
+			<appender-ref ref="ERRORAPPENDER" />
+		</logger>
+		<logger name="com" level="INFO" additivity="false">
+			<appender-ref ref="INFOAPPENDER" />
+		</logger>
+		<logger name="com" level="DEBUG" additivity="false">
+			<appender-ref ref="DEBUGAPPENDER" />
+		</logger>
+	</springProfile>
+	<springProfile name="uat,prod">
+		<logger name="com" level="ERROR" additivity="false">
+			<appender-ref ref="ERRORAPPENDER" />
+		</logger>
+		<logger name="com" level="INFO" additivity="false">
+			<appender-ref ref="INFOAPPENDER" />
+		</logger>
+	</springProfile>
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="INFOAPPENDER" level="INFO" />
+		<appender-ref ref="DEBUGAPPENDER" level="DEBUG" />
+		<appender-ref ref="ERRORAPPENDER" level="ERROR" />
+		<appender-ref ref="TRACEAPPENDER" level="TRACE" />
+	</root>
+</configuration>

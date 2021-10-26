@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "batchId": {
+      "type": "integer"
+    },
+    "wqId": {
+      "type": "integer"
+    },
+    "success": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "serviceName": {
+      "type": "string"
+    },
+    "moduleAudit": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "moduleName": {
+              "type": "string"
+            },
+            "modStatus": {
+              "type": "string"
+            },
+            "modMessage": {
+              "type": "string"
+            },
+            "modStartOn": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "object",
+                  "properties": {
+                    "year": {
+                      "type": "integer"
+                    },
+                    "month": {
+                      "type": "integer"
+                    },
+                    "day": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "year",
+                    "month",
+                    "day"
+                  ]
+                },
+                "time": {
+                  "type": "object",
+                  "properties": {
+                    "hour": {
+                      "type": "integer"
+                    },
+                    "minute": {
+                      "type": "integer"
+                    },
+                    "second": {
+                      "type": "integer"
+                    },
+                    "nano": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "hour",
+                    "minute",
+                    "second",
+                    "nano"
+                  ]
+                }
+              },
+              "required": [
+                "date",
+                "time"
+              ]
+            },
+            "modEndTo": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "object",
+                  "properties": {
+                    "year": {
+                      "type": "integer"
+                    },
+                    "month": {
+                      "type": "integer"
+                    },
+                    "day": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "year",
+                    "month",
+                    "day"
+                  ]
+                },
+                "time": {
+                  "type": "object",
+                  "properties": {
+                    "hour": {
+                      "type": "integer"
+                    },
+                    "minute": {
+                      "type": "integer"
+                    },
+                    "second": {
+                      "type": "integer"
+                    },
+                    "nano": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "hour",
+                    "minute",
+                    "second",
+                    "nano"
+                  ]
+                }
+              },
+              "required": [
+                "date",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "moduleName",
+            "modStatus",
+            "modMessage",
+            "modStartOn",
+            "modEndTo"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "batchId",
+    "success",
+    "serviceName",
+    "moduleAudit"
+  ]
+}

@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="ProcessFda" name="executeCase" isExecutable="true">
+    <documentation>executeCaseMgt</documentation>
+    <startEvent id="casemgtInitiate" name="Start" flowable:formFieldValidation="true"></startEvent>
+    <serviceTask id="casemgtCreate" name="casemgtCreate" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${caseMgtPath}/case-management/case/initiate]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${ExtractedMailDetails}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[wqout]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseParameters">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariablePrefix">
+          <flowable:string><![CDATA[wqRes]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="platform-adapter-extract" name="PlatformAdapterExtract" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${platformAdapterPath}/platform-adapter/extract]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[{ 
+"wqId": ${wqout.wqId}
+}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[platformOut]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseParameters">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="business-rules" name="BusinessRulesProcessor" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${businessRulesProcessorPath}/business-rules/execute/process]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[{ 
+"wqId": ${wqout.wqId}
+}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[businessRulesProcessorOut]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <endEvent id="sid-E5CE38DB-A781-483A-985E-ED509F1157CD" name="End"></endEvent>
+    <serviceTask id="output-generator" name="OutputGeneration" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${outputGenerationPath}/output-generator/generateoutput]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[{ 
+"wqId": ${wqout.wqId}
+}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[OututGenerationOut]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="CaseIniExceptionHandler" name="CaseIniExceptionHandler" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${caseMgtPath}/case-management/case/exception]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${wqout}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[exceptionResponseCase]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariablePrefix">
+          <flowable:string><![CDATA[exceptionResultCase]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <exclusiveGateway id="sid-FEC0717A-CC67-4B9C-95C7-0B4BC9AF1E59"></exclusiveGateway>
+    <sequenceFlow id="sid-048E3559-B13D-43AB-A7E4-52FF41D29578" sourceRef="casemgtCreate" targetRef="sid-FEC0717A-CC67-4B9C-95C7-0B4BC9AF1E59"></sequenceFlow>
+    <exclusiveGateway id="sid-B8387E1C-5882-4C9E-A197-40F102275B3A"></exclusiveGateway>
+    <exclusiveGateway id="sid-E45FC9BA-B511-4EFB-9ED4-AB28A9241157"></exclusiveGateway>
+    <sequenceFlow id="sid-A3475A0B-131F-4C41-A5D4-926B54A48E29" sourceRef="business-rules" targetRef="sid-E45FC9BA-B511-4EFB-9ED4-AB28A9241157"></sequenceFlow>
+    <exclusiveGateway id="sid-3CFA8F7C-D948-49AE-9C0D-BCBE273D55B5"></exclusiveGateway>
+    <sequenceFlow id="sid-88E8062D-E232-4706-9CD3-9846EEAF7AE8" sourceRef="CaseIniExceptionHandler" targetRef="sid-E5CE38DB-A781-483A-985E-ED509F1157CD"></sequenceFlow>
+    <sequenceFlow id="sid-4C826D5F-55AD-437D-8AAB-9F502124AD35" sourceRef="platform-adapter-extract" targetRef="sid-B8387E1C-5882-4C9E-A197-40F102275B3A"></sequenceFlow>
+    <sequenceFlow id="sid-6FD8AD0F-811D-49BC-AC47-677C16B0866B" sourceRef="output-generator" targetRef="sid-3CFA8F7C-D948-49AE-9C0D-BCBE273D55B5"></sequenceFlow>
+    <serviceTask id="PlatformExceptionHandler" name="PlatformExceptionHandler" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${caseMgtPath}/case-management/case/exception]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${platformOut}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[exceptionResponsePlatform]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariablePrefix">
+          <flowable:string><![CDATA[exceptionResultPlatform]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="DataExceptionHandler" name="DataExceptionHandler" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${caseMgtPath}/case-management/case/exception]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${businessRulesProcessorOut}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[exceptionResponseData]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariablePrefix">
+          <flowable:string><![CDATA[exceptionResultData]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="OutputExceptionHandler" name="OutputExceptionHandler" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[POST]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:expression><![CDATA[${caseMgtPath}/case-management/case/exception]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="requestHeaders">
+          <flowable:string><![CDATA[Accept: application/json
+Cache-Control: no-cache
+Accept-Encoding: gzip,deflate
+Content-Type: application/json]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[${OututGenerationOut}]]></flowable:expression>
+        </flowable:field>
+        <flowable:field name="responseVariableName">
+          <flowable:string><![CDATA[exceptionResponseOutput]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="resultVariablePrefix">
+          <flowable:string><![CDATA[exceptionResultOutput]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="saveResponseVariableAsJson">
+          <flowable:string><![CDATA[true]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="httpActivityBehaviorClass">
+          <flowable:string><![CDATA[com.genpact.fda.config.FDAFlowableImpl]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestTimeout">
+          <flowable:string><![CDATA[3600000]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="sid-1DB08FA4-16FE-4040-B32D-60D4C041DD4D" sourceRef="PlatformExceptionHandler" targetRef="sid-E5CE38DB-A781-483A-985E-ED509F1157CD"></sequenceFlow>
+    <sequenceFlow id="sid-D5B3DB0D-9744-48E2-94AB-BC90C01B9302" sourceRef="OutputExceptionHandler" targetRef="sid-E5CE38DB-A781-483A-985E-ED509F1157CD"></sequenceFlow>
+    <sequenceFlow id="sid-D32781D4-CF92-408A-9640-DD0091CE6C91" sourceRef="DataExceptionHandler" targetRef="sid-E5CE38DB-A781-483A-985E-ED509F1157CD"></sequenceFlow>
+    <sequenceFlow id="sid-160C50F3-6B0B-4159-B00F-22335B155D90" sourceRef="casemgtInitiate" targetRef="casemgtCreate"></sequenceFlow>
+    <sequenceFlow id="OutputFlow" name="OutputFlow" sourceRef="sid-3CFA8F7C-D948-49AE-9C0D-BCBE273D55B5" targetRef="sid-E5CE38DB-A781-483A-985E-ED509F1157CD">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${OututGenerationOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="OutputExceptionFlow" name="OutputExceptionFlow" sourceRef="sid-3CFA8F7C-D948-49AE-9C0D-BCBE273D55B5" targetRef="OutputExceptionHandler">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!OututGenerationOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="BusinessRulesProcessorExceptionFlow" name="BusinessRulesProcessorExceptionFlow" sourceRef="sid-E45FC9BA-B511-4EFB-9ED4-AB28A9241157" targetRef="DataExceptionHandler">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!businessRulesProcessorOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="BusinessRulesProcessorFlow" name="BusinessRulesProcessorFlow" sourceRef="sid-E45FC9BA-B511-4EFB-9ED4-AB28A9241157" targetRef="output-generator">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${businessRulesProcessorOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="PlatformExtractFlow" name="PlatformExtractFlow" sourceRef="sid-B8387E1C-5882-4C9E-A197-40F102275B3A" targetRef="business-rules">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${platformOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="PlatformExtractExceptionFlow" name="PlatformExtractExceptionFlow" sourceRef="sid-B8387E1C-5882-4C9E-A197-40F102275B3A" targetRef="PlatformExceptionHandler">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!platformOut.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="caseCreateFlow" name="caseCreateFlow" sourceRef="sid-FEC0717A-CC67-4B9C-95C7-0B4BC9AF1E59" targetRef="platform-adapter-extract">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wqout.success}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="CaseCreateExceptionFlow" name="CaseCreateExceptionFlow" sourceRef="sid-FEC0717A-CC67-4B9C-95C7-0B4BC9AF1E59" targetRef="CaseIniExceptionHandler">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!wqout.success}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_mgt">
+    <bpmndi:BPMNPlane bpmnElement="mgt" id="BPMNPlane_mgt">
+      <bpmndi:BPMNShape bpmnElement="casemgtInitiate" id="BPMNShape_casemgtInitiate">
+        <omgdc:Bounds height="30.0" width="30.0" x="15.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="casemgtCreate" id="BPMNShape_casemgtCreate">
+        <omgdc:Bounds height="80.0" width="100.0" x="75.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="platform-adapter-extract" id="BPMNShape_platform-adapter-extract">
+        <omgdc:Bounds height="80.0" width="100.0" x="390.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="business-rules" id="BPMNShape_business-rules">
+        <omgdc:Bounds height="80.0" width="100.0" x="705.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-E5CE38DB-A781-483A-985E-ED509F1157CD" id="BPMNShape_sid-E5CE38DB-A781-483A-985E-ED509F1157CD">
+        <omgdc:Bounds height="28.0" width="28.0" x="246.0" y="491.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="output-generator" id="BPMNShape_output-generator">
+        <omgdc:Bounds height="80.00000000000003" width="100.0" x="852.5189561910429" y="186.68670227118216"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CaseIniExceptionHandler" id="BPMNShape_CaseIniExceptionHandler">
+        <omgdc:Bounds height="80.0" width="100.0" x="210.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-FEC0717A-CC67-4B9C-95C7-0B4BC9AF1E59" id="BPMNShape_sid-FEC0717A-CC67-4B9C-95C7-0B4BC9AF1E59">
+        <omgdc:Bounds height="40.0" width="40.0" x="240.0" y="35.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-B8387E1C-5882-4C9E-A197-40F102275B3A" id="BPMNShape_sid-B8387E1C-5882-4C9E-A197-40F102275B3A">
+        <omgdc:Bounds height="40.0" width="40.0" x="526.1170700369679" y="35.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-E45FC9BA-B511-4EFB-9ED4-AB28A9241157" id="BPMNShape_sid-E45FC9BA-B511-4EFB-9ED4-AB28A9241157">
+        <omgdc:Bounds height="40.0" width="40.0" x="882.5189561910429" y="35.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-3CFA8F7C-D948-49AE-9C0D-BCBE273D55B5" id="BPMNShape_sid-3CFA8F7C-D948-49AE-9C0D-BCBE273D55B5">
+        <omgdc:Bounds height="40.0" width="40.0" x="882.518956191043" y="315.19822770557164"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="PlatformExceptionHandler" id="BPMNShape_PlatformExceptionHandler">
+        <omgdc:Bounds height="80.0" width="100.0" x="496.1170700369679" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DataExceptionHandler" id="BPMNShape_DataExceptionHandler">
+        <omgdc:Bounds height="80.0" width="100.0" x="1065.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="OutputExceptionHandler" id="BPMNShape_OutputExceptionHandler">
+        <omgdc:Bounds height="80.0" width="100.0" x="852.518956191043" y="420.2643036074288"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-A3475A0B-131F-4C41-A5D4-926B54A48E29" id="BPMNEdge_sid-A3475A0B-131F-4C41-A5D4-926B54A48E29">
+        <omgdi:waypoint x="804.9499999999977" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="882.5189561910429" y="55.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="PlatformExtractFlow" id="BPMNEdge_PlatformExtractFlow">
+        <omgdi:waypoint x="565.6080709979622" y="55.454301202115595"></omgdi:waypoint>
+        <omgdi:waypoint x="704.9999999999978" y="55.11985146770145"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="caseCreateFlow" id="BPMNEdge_caseCreateFlow">
+        <omgdi:waypoint x="279.4976130653266" y="55.44692737430167"></omgdi:waypoint>
+        <omgdi:waypoint x="389.9999999999972" y="55.139136490250685"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-D32781D4-CF92-408A-9640-DD0091CE6C91" id="BPMNEdge_sid-D32781D4-CF92-408A-9640-DD0091CE6C91">
+        <omgdi:waypoint x="1115.0" y="94.95"></omgdi:waypoint>
+        <omgdi:waypoint x="1115.0" y="505.0"></omgdi:waypoint>
+        <omgdi:waypoint x="273.9499149553328" y="505.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-4C826D5F-55AD-437D-8AAB-9F502124AD35" id="BPMNEdge_sid-4C826D5F-55AD-437D-8AAB-9F502124AD35">
+        <omgdi:waypoint x="489.9499999999828" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="526.1170700369679" y="55.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="PlatformExtractExceptionFlow" id="BPMNEdge_PlatformExtractExceptionFlow">
+        <omgdi:waypoint x="546.5796684621647" y="74.48355962219598"></omgdi:waypoint>
+        <omgdi:waypoint x="546.1955572668304" y="270.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-048E3559-B13D-43AB-A7E4-52FF41D29578" id="BPMNEdge_sid-048E3559-B13D-43AB-A7E4-52FF41D29578">
+        <omgdi:waypoint x="174.95" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="240.0" y="55.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="BusinessRulesProcessorFlow" id="BPMNEdge_BusinessRulesProcessorFlow">
+        <omgdi:waypoint x="902.9632986625207" y="74.49993070237083"></omgdi:waypoint>
+        <omgdi:waypoint x="902.635641656298" y="186.68670227118216"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="CaseCreateExceptionFlow" id="BPMNEdge_CaseCreateExceptionFlow">
+        <omgdi:waypoint x="260.46259842519686" y="74.48355962219598"></omgdi:waypoint>
+        <omgdi:waypoint x="260.0784872298625" y="270.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="OutputExceptionFlow" id="BPMNEdge_OutputExceptionFlow">
+        <omgdi:waypoint x="902.9423840908057" y="354.7169058846802"></omgdi:waypoint>
+        <omgdi:waypoint x="902.6793128519989" y="420.2643036074288"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-6FD8AD0F-811D-49BC-AC47-677C16B0866B" id="BPMNEdge_sid-6FD8AD0F-811D-49BC-AC47-677C16B0866B">
+        <omgdi:waypoint x="902.5189561910429" y="266.63670227118223"></omgdi:waypoint>
+        <omgdi:waypoint x="902.518956191043" y="315.19822770557164"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-160C50F3-6B0B-4159-B00F-22335B155D90" id="BPMNEdge_sid-160C50F3-6B0B-4159-B00F-22335B155D90">
+        <omgdi:waypoint x="44.94999797575196" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="75.0" y="55.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="OutputFlow" id="BPMNEdge_OutputFlow">
+        <omgdi:waypoint x="883.018956191043" y="335.69822770557164"></omgdi:waypoint>
+        <omgdi:waypoint x="726.4588493774964" y="335.69822770557164"></omgdi:waypoint>
+        <omgdi:waypoint x="726.4588493774964" y="505.0"></omgdi:waypoint>
+        <omgdi:waypoint x="273.94991713904164" y="505.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-88E8062D-E232-4706-9CD3-9846EEAF7AE8" id="BPMNEdge_sid-88E8062D-E232-4706-9CD3-9846EEAF7AE8">
+        <omgdi:waypoint x="260.0" y="349.95000000000005"></omgdi:waypoint>
+        <omgdi:waypoint x="260.0" y="491.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-D5B3DB0D-9744-48E2-94AB-BC90C01B9302" id="BPMNEdge_sid-D5B3DB0D-9744-48E2-94AB-BC90C01B9302">
+        <omgdi:waypoint x="852.5189561909901" y="460.2643036074288"></omgdi:waypoint>
+        <omgdi:waypoint x="563.2594780955214" y="460.2643036074288"></omgdi:waypoint>
+        <omgdi:waypoint x="563.2594780955214" y="505.0"></omgdi:waypoint>
+        <omgdi:waypoint x="273.9499196819841" y="505.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-1DB08FA4-16FE-4040-B32D-60D4C041DD4D" id="BPMNEdge_sid-1DB08FA4-16FE-4040-B32D-60D4C041DD4D">
+        <omgdi:waypoint x="546.1170700369679" y="349.95000000000005"></omgdi:waypoint>
+        <omgdi:waypoint x="546.1170700369679" y="505.0"></omgdi:waypoint>
+        <omgdi:waypoint x="273.94992011330726" y="505.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="BusinessRulesProcessorExceptionFlow" id="BPMNEdge_BusinessRulesProcessorExceptionFlow">
+        <omgdi:waypoint x="922.0092598961683" y="55.45507871613978"></omgdi:waypoint>
+        <omgdi:waypoint x="1064.9999999999995" y="55.11781713851031"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
