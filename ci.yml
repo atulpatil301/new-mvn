@@ -33,11 +33,11 @@ steps:
     displayName: 'Build and Test'
     inputs:
       mavenPomFile: 'pom.xml'
+      options: '-Dmaven.test.failure.ignore=true'
       goals: package
       mavenVersionSelection: Path
       jdkSourceOption: 'PreInstalled'
-      mavenPath: /usr/share/maven
-      mavenOptions: '-Xmx2048m'
+      mavenOptions: '-Xmx3072m'
       mavenVersionOption: 'Default'
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'
