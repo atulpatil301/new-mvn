@@ -51,6 +51,7 @@ steps:
       repository: 660857977215.dkr.ecr.ap-south-1.amazonaws.com/demo
 
   - task: ECRPushImage@1
+    displayName: push image to ecr and deploy to k8s
     inputs:
       awsCredentials: 'AWS_ECR'
       regionName: ap-south-1
@@ -60,12 +61,3 @@ steps:
       pushTag: latest
       repositoryName: demo
 
-  - task: Kubernetes@1
-    displayName: 'kubectl get pods'
-    inputs:
-      namespace: demo
-      kubernetesServiceConnection: 'aws_ecr'
-      command: 'delete'
-      arguments: 'pods'
-      versionOrLocation: location
-      specifyLocation: /usr/bin/kubectl
