@@ -59,3 +59,12 @@ steps:
       sourceImageTag: $(Build.BuildId)
       pushTag: latest
       repositoryName: demo
+
+  - task: Kubernetes@1
+    displayName: 'kubectl get pods'
+    inputs:
+      namespace: demo
+      command: 'delete'
+      arguments: 'pods'
+      versionOrLocation: location
+      specifyLocation: /usr/bin/kubectl
