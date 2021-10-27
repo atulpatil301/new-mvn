@@ -34,10 +34,10 @@ steps:
     inputs:
       mavenPomFile: 'pom.xml'
       options: '-Dmaven.test.failure.ignore=true'
-      goals: package
-      mavenVersionSelection: Path
-      jdkSourceOption: 'PreInstalled'
       mavenOptions: '-Xmx3072m'
       mavenVersionOption: 'Default'
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'
+      jdkArchitectureOption: 'x64'
+      mavenAuthenticateFeed: false
+      goals: 'verify'
