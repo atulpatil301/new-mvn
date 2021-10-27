@@ -49,3 +49,13 @@ steps:
       dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
       buildContext: '$(Build.SourcesDirectory)'
       repository: 660857977215.dkr.ecr.ap-south-1.amazonaws.com/demo
+
+  - task: ECRPushImage@1
+    inputs:
+      awsCredentials: 'AWS_ECR'
+      regionName: ap-south-1
+      imageSource: 'imagename'
+      sourceImageName: 660857977215.dkr.ecr.ap-south-1.amazonaws.com/demo
+      sourceImageTag: $(Build.BuildId)
+      pushTag: latest
+      repositoryName: demo
