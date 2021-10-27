@@ -41,3 +41,11 @@ steps:
       jdkArchitectureOption: 'x64'
       mavenAuthenticateFeed: false
       goals: 'verify'
+
+  - task: Docker@2
+    displayName: Build an image
+    inputs:
+      command: build
+      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+      buildContext: '$(Build.SourcesDirectory)'
+      repository: 660857977215.dkr.ecr.ap-south-1.amazonaws.com/demo
