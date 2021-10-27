@@ -1,5 +1,4 @@
 FROM openjdk:11
-MAINTAINER niranjan.kumbhar@genpact.digital
 
 COPY /target/fda-flowable-1.2.0-RELEASE.jar /Flowable/
 COPY /src/main/resources/application.properties /Flowable/
