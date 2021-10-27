@@ -64,6 +64,7 @@ steps:
     displayName: 'kubectl get pods'
     inputs:
       namespace: demo
+      kubernetesServiceConnection: 'aws_ecr'
       command: 'delete'
       arguments: 'pods'
       versionOrLocation: location
